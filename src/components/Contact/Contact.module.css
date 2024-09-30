@@ -1,0 +1,26 @@
+.contact {
+    display: flex;
+    align-items: center;
+    max-width: 320px;
+    border: 2px solid black;
+    border-radius: 8px;
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
+.btn {
+    margin-left: auto;
+    height: 32px;
+}
+
+.fields {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+    padding: 10px 0px;
+}
+
+.field {
+    margin-left: 10px;
+}
