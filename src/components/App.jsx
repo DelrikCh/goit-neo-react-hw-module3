@@ -1,9 +1,8 @@
 import SearchBox from "./SearchBox/SearchBox";
 import ContactForm from "./ContactForm/ContactForm";
 import ContactList from "./ContactList/ContactList";
-import Contact from "./Contact/Contact";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const initial_contacts = [
   { id: "id-1", name: "Rosie Simpson", number: "459-12-56" },
@@ -24,6 +23,9 @@ function save_contacts(contacts) {
 
 function App() {
   let [contacts, setContacts] = useState(load_contacts);
+  useEffect(() => {
+    save_contacts(contacts);
+  }, [contacts]);
   const addContact = ({ name, number }) => {
     const contact = {
       id: "id-" + Date.now(),
@@ -31,35 +33,24 @@ function App() {
       number: number,
     };
     setContacts((prevContacts) => [contact, ...prevContacts]);
-    save_contacts([contact, ...contacts]);
   };
   const deleteContact = (id) => {
     setContacts((prevContacts) =>
       prevContacts.filter((contact) => contact.id !== id)
     );
-    save_contacts(contacts.filter((contact) => contact.id !== id));
   };
   const [filter, setFilter] = useState("");
 
   const visibleContacts = contacts.filter((contact) =>
     contact.name.toLowerCase().includes(filter.toLowerCase())
   );
-  const contact_components = visibleContacts.map((contact) => (
-    <Contact
-      key={contact.id}
-      id={contact.id}
-      name={contact.name}
-      number={contact.number}
-      deleteContact={deleteContact}
-    />
-  ));
 
   return (
     <>
       <h1>Phonebook</h1>
       <ContactForm onSubmit={addContact} />
       <SearchBox value={filter} onChange={(e) => setFilter(e.target.value)} />
-      <ContactList contacts={contact_components} />
+      <ContactList contacts={visibleContacts} deleteContact={deleteContact} />
     </>
   );
 }
